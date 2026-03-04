@@ -1,16 +1,4 @@
-cat << 'EOF' > README.md
-# L'Atelier - Alta Pastelería
-
-![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-
-Una plataforma web moderna y minimalista para la exhibición y gestión de alta repostería. Desarrollada con un enfoque en diseño editorial y una arquitectura de software limpia utilizando Python y Flask.
-
----
-
-## Vistas Previas
+## Live Preview
 
 ### Inicio y Hero Section
 Página de aterrizaje con diseño asimétrico y tipografía contrastante.
