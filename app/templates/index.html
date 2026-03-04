@@ -1,46 +1,63 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="flex flex-col items-center text-center mb-12 py-10">
-    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
-        Arte <span class="text-primary/70">Horneado</span> Cada Día
-    </h1>
-    <p class="text-lg text-muted-foreground max-w-2xl mb-8">
-        Descubre nuestra selección de pasteles y postres elaborados con ingredientes de la más alta calidad y una pizca de amor.
-    </p>
-    {% if current_user.is_authenticated %}
-        <a href="#" class="inline-flex items-center justify-center rounded-md bg-foreground text-background hover:bg-foreground/90 h-11 px-8 py-2 transition-colors gap-2 font-medium">
-            <i data-lucide="shopping-bag" class="h-5 w-5"></i>
-            Hacer un Pedido
-        </a>
-    {% else %}
-        <a href="{{ url_for('auth.register') }}" class="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 py-2 transition-colors font-medium">
-            Únete a Nosotros
-        </a>
-    {% endif %}
-</div>
-
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {% for pastel in pasteles %}
-    <div class="group rounded-xl border border-border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-md transition-all">
-        <div class="aspect-video w-full overflow-hidden relative">
-            <img src="{{ pastel.imagen_url }}" alt="{{ pastel.nombre }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
-            <div class="absolute top-3 right-3 bg-background/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold shadow-sm">
-                ${{ "%.2f"|format(pastel.precio) }}
-            </div>
+<section class="relative overflow-hidden bg-muted/30 border-b border-border">
+    <div class="container mx-auto max-w-screen-xl px-4 md:px-8 py-24 md:py-32 flex flex-col items-center text-center">
+        <div class="inline-flex items-center rounded-full border border-border px-3 py-1 text-sm font-medium mb-6 bg-background">
+            <span class="flex h-2 w-2 rounded-full bg-primary mr-2"></span>
+            Nuevas recetas de temporada disponibles
         </div>
-        <div class="p-6">
-            <h3 class="text-xl font-semibold leading-none tracking-tight mb-2">{{ pastel.nombre }}</h3>
-            <p class="text-sm text-muted-foreground mb-4 line-clamp-2">
-                {{ pastel.descripcion }}
-            </p>
-            <button class="w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-muted hover:text-foreground h-10 px-4 py-2 gap-2">
-                <i data-lucide="plus" class="h-4 w-4"></i>
-                Añadir al Carrito
-            </button>
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl text-foreground">
+            El arte de la repostería <span class="text-transparent bg-clip-text bg-gradient-to-r from-foreground to-muted-foreground">hecha a mano</span>
+        </h1>
+        <p class="text-xl text-muted-foreground max-w-2xl mb-10">
+            Ingredientes premium, técnicas clásicas y un diseño contemporáneo. Descubre nuestra colección exclusiva de postres para tus momentos especiales.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="#catalogo" class="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-8 font-medium transition-colors">
+                Ver Catálogo
+            </a>
+            <a href="{{ url_for('auth.register') }}" class="inline-flex items-center justify-center rounded-md border border-input bg-background hover:bg-muted hover:text-foreground h-12 px-8 font-medium transition-colors">
+                Crear una cuenta
+            </a>
         </div>
     </div>
-    {% endfor %}
-</div>
+</section>
+
+<section id="catalogo" class="container mx-auto max-w-screen-xl px-4 md:px-8 py-20">
+    <div class="flex items-center justify-between mb-10">
+        <h2 class="text-3xl font-bold tracking-tight">Nuestras Creaciones</h2>
+        <div class="hidden md:flex gap-2">
+            <button class="inline-flex items-center justify-center rounded-md bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4 text-sm font-medium">Todos</button>
+            <button class="inline-flex items-center justify-center rounded-md hover:bg-muted h-9 px-4 text-sm font-medium text-muted-foreground">Tartas</button>
+            <button class="inline-flex items-center justify-center rounded-md hover:bg-muted h-9 px-4 text-sm font-medium text-muted-foreground">Macarons</button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for pastel in pasteles %}
+        <div class="group rounded-xl border border-border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col">
+            <div class="aspect-[4/3] w-full overflow-hidden relative rounded-t-xl">
+                <img src="{{ pastel.imagen_url }}" alt="{{ pastel.nombre }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <div class="absolute top-4 right-4 bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full text-sm font-bold shadow-sm">
+                    ${{ "%.2f"|format(pastel.precio) }}
+                </div>
+            </div>
+            <div class="p-6 flex flex-col flex-1">
+                <div class="flex items-start justify-between gap-4 mb-2">
+                    <h3 class="text-xl font-bold leading-tight">{{ pastel.nombre }}</h3>
+                </div>
+                <p class="text-sm text-muted-foreground mb-6 flex-1">
+                    {{ pastel.descripcion }}
+                </p>
+                <button class="w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-foreground hover:text-background h-11 gap-2">
+                    <i data-lucide="shopping-cart" class="h-4 w-4"></i>
+                    Añadir al carrito
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
 
 {% endblock %}

@@ -4,6 +4,7 @@ pymysql.install_as_MySQLdb()
 from flask import Flask, render_template
 from config import Config
 from app.extensions import db, login_manager, migrate
+from flask_login import login_required, current_user
 
 def create_app():
     app = Flask(__name__)
@@ -26,5 +27,15 @@ def create_app():
     def index():
         pasteles = Pastel.query.all()
         return render_template('index.html', pasteles=pasteles)
+
+    @app.route('/dashboard')
+    @login_required
+    def dashboard():
+        stats = {
+            "pedidos_activos": 3,
+            "total_gastado": 124.50,
+            "puntos_fidelidad": 450
+        }
+        return render_template('dashboard.html', stats=stats)
 
     return app

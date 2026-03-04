@@ -11,13 +11,12 @@ def register():
         username = request.form.get('username')
         password = request.form.get('password')
         
-        # Verificar si el usuario ya existe
         if User.query.filter_by(username=username).first():
             flash('Ese nombre de usuario ya está registrado.')
             return redirect(url_for('auth.register'))
             
         new_user = User(username=username)
-        new_user.set_password(password) # Usa el método del modelo
+        new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
         
@@ -35,7 +34,8 @@ def login():
         
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('index'))
+            flash('¡Bienvenido de nuevo!')
+            return redirect(url_for('dashboard'))
         
         flash('Usuario o contraseña incorrectos.')
     return render_template('login.html')
@@ -44,5 +44,5 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('Has cerrado sesión.')
+    flash('Has cerrado sesión exitosamente.')
     return redirect(url_for('auth.login'))
