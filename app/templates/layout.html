@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repostería App</title>
+    <title>L'Atelier</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -23,6 +27,9 @@
             --color-muted: var(--muted);
             --color-muted-foreground: var(--muted-foreground);
             --color-ring: var(--ring);
+            
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
         }
         @layer base {
             :root {
@@ -56,54 +63,55 @@
                 --ring: #d4d4d8;
             }
             body {
-                @apply bg-background text-foreground;
+                @apply bg-background text-foreground font-sans;
             }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans transition-colors duration-300">
+<body class="min-h-screen flex flex-col transition-colors duration-300">
 
-    <header class="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
-        <div class="container mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 md:px-8">
-            <a href="/" class="flex items-center gap-2 font-bold tracking-tight hover:opacity-80 transition-opacity">
-                <i data-lucide="croissant" class="h-6 w-6"></i>
-                <span class="hidden sm:inline-block">L'Atelier Sucré</span>
+    <header class="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md">
+        <div class="container mx-auto flex h-20 max-w-screen-xl items-center justify-between px-4 md:px-8">
+            <a href="/" class="flex flex-col hover:opacity-70 transition-opacity">
+                <span class="font-serif text-2xl font-semibold leading-none tracking-tight">L'ATELIER</span>
+                <span class="text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground mt-1">Pâtisserie</span>
             </a>
 
             <nav class="flex items-center gap-6 text-sm font-medium">
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('dashboard') }}" class="text-muted-foreground hover:text-foreground transition-colors">Dashboard</a>
-                    <span class="text-foreground flex items-center gap-2 border-l border-border pl-6">
-                        <i data-lucide="circle-user-round" class="h-5 w-5"></i>
-                        {{ current_user.username }}
-                    </span>
-                    <a href="{{ url_for('auth.logout') }}" class="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
-                        <i data-lucide="log-out" class="h-4 w-4"></i>
-                    </a>
+                    <div class="flex items-center gap-3 border-l border-border pl-6">
+                        <span class="text-foreground">{{ current_user.username }}</span>
+                        <a href="{{ url_for('auth.logout') }}" class="text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center h-8 w-8 rounded-full bg-muted/50 hover:bg-muted">
+                            <i data-lucide="log-out" class="h-4 w-4"></i>
+                        </a>
+                    </div>
                 {% else %}
                     <a href="{{ url_for('auth.login') }}" class="text-muted-foreground hover:text-foreground transition-colors">Acceder</a>
-                    <a href="{{ url_for('auth.register') }}" class="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 transition-colors">
+                    <a href="{{ url_for('auth.register') }}" class="inline-flex items-center justify-center bg-foreground text-background hover:bg-foreground/90 h-9 px-5 transition-colors text-xs uppercase tracking-wider">
                         Registrarse
                     </a>
                 {% endif %}
                 
-                <button id="theme-toggle" class="inline-flex items-center justify-center rounded-md p-2 hover:bg-muted text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                    <i data-lucide="sun" class="h-5 w-5 block dark:hidden"></i>
-                    <i data-lucide="moon" class="h-5 w-5 hidden dark:block"></i>
+                <button id="theme-toggle" class="inline-flex items-center justify-center h-9 w-9 rounded-full hover:bg-muted text-foreground transition-colors">
+                    <i data-lucide="sun" class="h-4 w-4 block dark:hidden"></i>
+                    <i data-lucide="moon" class="h-4 w-4 hidden dark:block"></i>
                 </button>
             </nav>
         </div>
     </header>
 
     <main class="flex-1 w-full">
-        <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+        <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="toast-message flex items-center gap-3 rounded-md border border-border bg-popover px-4 py-3 text-sm text-popover-foreground shadow-lg transition-all duration-300 transform translate-x-0">
-                            <i data-lucide="bell" class="h-4 w-4 text-primary"></i>
-                            <p>{{ message }}</p>
-                            <button onclick="this.parentElement.remove()" class="ml-4 text-muted-foreground hover:text-foreground">
+                        <div class="toast-message flex items-start gap-4 border border-border bg-background p-4 shadow-xl transition-all duration-500 transform translate-x-0 w-80">
+                            <i data-lucide="info" class="h-5 w-5 text-muted-foreground shrink-0 mt-0.5"></i>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium">{{ message }}</p>
+                            </div>
+                            <button onclick="this.parentElement.remove()" class="text-muted-foreground hover:text-foreground shrink-0">
                                 <i data-lucide="x" class="h-4 w-4"></i>
                             </button>
                         </div>
@@ -115,15 +123,17 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="border-t border-border bg-muted/30 mt-auto">
-        <div class="container mx-auto max-w-screen-xl px-4 md:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2 text-muted-foreground">
-                <i data-lucide="cake-slice" class="h-5 w-5"></i>
-                    <p class="text-sm">© 2026 - Crafted with <span>❤️</span> by Ferpa</p>
+    <footer class="border-t border-border bg-background mt-auto">
+        <div class="container mx-auto max-w-screen-xl px-4 md:px-8 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex flex-col items-center md:items-start">
+                <span class="font-serif text-xl font-semibold tracking-tight">L'ATELIER</span>
+                <p class="text-xs text-muted-foreground mt-2 flex items-center gap-1">
+                    © 2026 Crafted with <i data-lucide="heart" class="h-3 w-3"></i> by Ferpa
+                </p>
             </div>
-            <div class="flex gap-4 text-muted-foreground">
-                <a href="https://github.com/fernixp" target="_blank" class="hover:text-foreground transition-colors"><i data-lucide="github" class="h-5 w-5 text-primary"></i></a>
-                <a href="https://www.linkedin.com/in/fernando-nina-inc/" target="_blank" class="hover:text-foreground transition-colors"><i data-lucide="linkedin" class="h-5 w-5 text-primary"></i></a>
+            <div class="flex gap-6 text-muted-foreground">
+                <a href="https://github.com/fernixp" target="_blank" class="hover:text-foreground transition-colors"><i data-lucide="github" class="h-5 w-5"></i></a>
+                <a href="https://www.linkedin.com/in/fernando-nina-inc/" target="_blank" class="hover:text-foreground transition-colors"><i data-lucide="linkedin" class="h-5 w-5"></i></a>
             </div>
         </div>
     </footer>
@@ -149,9 +159,9 @@
         setTimeout(() => {
             document.querySelectorAll('.toast-message').forEach(toast => {
                 toast.classList.add('opacity-0', 'translate-x-full');
-                setTimeout(() => toast.remove(), 300);
+                setTimeout(() => toast.remove(), 500);
             });
-        }, 4000);
+        }, 5000);
     </script>
 </body>
 </html>
