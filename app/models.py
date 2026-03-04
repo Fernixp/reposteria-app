@@ -13,3 +13,10 @@ class User(db.Model, UserMixin):
     
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+class Pastel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    descripcion = db.Column(db.Text, nullable=False)
+    precio = db.Column(db.Float, nullable=False)
+    imagen_url = db.Column(db.String(500), nullable=False)

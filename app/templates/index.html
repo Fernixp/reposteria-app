@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="flex flex-col items-center text-center mb-12 py-10">
+    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+        Arte <span class="text-primary/70">Horneado</span> Cada Día
+    </h1>
+    <p class="text-lg text-muted-foreground max-w-2xl mb-8">
+        Descubre nuestra selección de pasteles y postres elaborados con ingredientes de la más alta calidad y una pizca de amor.
+    </p>
+    {% if current_user.is_authenticated %}
+        <a href="#" class="inline-flex items-center justify-center rounded-md bg-foreground text-background hover:bg-foreground/90 h-11 px-8 py-2 transition-colors gap-2 font-medium">
+            <i data-lucide="shopping-bag" class="h-5 w-5"></i>
+            Hacer un Pedido
+        </a>
+    {% else %}
+        <a href="{{ url_for('auth.register') }}" class="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 py-2 transition-colors font-medium">
+            Únete a Nosotros
+        </a>
+    {% endif %}
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for pastel in pasteles %}
+    <div class="group rounded-xl border border-border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-md transition-all">
+        <div class="aspect-video w-full overflow-hidden relative">
+            <img src="{{ pastel.imagen_url }}" alt="{{ pastel.nombre }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+            <div class="absolute top-3 right-3 bg-background/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold shadow-sm">
+                ${{ "%.2f"|format(pastel.precio) }}
+            </div>
+        </div>
+        <div class="p-6">
+            <h3 class="text-xl font-semibold leading-none tracking-tight mb-2">{{ pastel.nombre }}</h3>
+            <p class="text-sm text-muted-foreground mb-4 line-clamp-2">
+                {{ pastel.descripcion }}
+            </p>
+            <button class="w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-muted hover:text-foreground h-10 px-4 py-2 gap-2">
+                <i data-lucide="plus" class="h-4 w-4"></i>
+                Añadir al Carrito
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

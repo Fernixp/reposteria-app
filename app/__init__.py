@@ -16,13 +16,15 @@ def create_app():
     from .auth import auth_bp
     app.register_blueprint(auth_bp)
 
-    from .models import User
+    from .models import User, Pastel
+    
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
     @app.route('/')
     def index():
-        return render_template('layout.html')
+        pasteles = Pastel.query.all()
+        return render_template('index.html', pasteles=pasteles)
 
     return app
