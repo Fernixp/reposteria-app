@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repostería App</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style type="text/tailwindcss">
+        @theme {
+            --color-background: var(--background);
+            --color-foreground: var(--foreground);
+            --color-card: var(--card);
+            --color-card-foreground: var(--card-foreground);
+            --color-border: var(--border);
+            --color-input: var(--input);
+            --color-primary: var(--primary);
+            --color-primary-foreground: var(--primary-foreground);
+            --color-muted: var(--muted);
+            --color-muted-foreground: var(--muted-foreground);
+            --color-ring: var(--ring);
+        }
+        @layer base {
+            :root {
+                --background: #ffffff;
+                --foreground: #09090b;
+                --card: #ffffff;
+                --card-foreground: #09090b;
+                --border: #e4e4e7;
+                --input: #e4e4e7;
+                --primary: #18181b;
+                --primary-foreground: #fafafa;
+                --muted: #f4f4f5;
+                --muted-foreground: #71717a;
+                --ring: #18181b;
+            }
+            .dark {
+                --background: #09090b;
+                --foreground: #fafafa;
+                --card: #09090b;
+                --card-foreground: #fafafa;
+                --border: #27272a;
+                --input: #27272a;
+                --primary: #fafafa;
+                --primary-foreground: #18181b;
+                --muted: #27272a;
+                --muted-foreground: #a1a1aa;
+                --ring: #d4d4d8;
+            }
+            body {
+                @apply bg-background text-foreground;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans transition-colors duration-300">
+
+    <header class="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-sm">
+        <div class="container mx-auto flex h-14 max-w-screen-xl items-center justify-between px-4 md:px-8">
+            <a href="/" class="flex items-center gap-2 font-semibold hover:opacity-80 transition-opacity">
+                <span class="hidden sm:inline-block">Reposteria - UAB</span>
+            </a>
+
+            <nav class="flex items-center gap-4 text-sm font-medium">
+                {% if current_user.is_authenticated %}
+                    <span class="text-muted-foreground flex items-center gap-2">
+                        <i data-lucide="user" class="h-4 w-4"></i>
+                        {{ current_user.username }}
+                    </span>
+                    <a href="{{ url_for('auth.logout') }}" class="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+                        <i data-lucide="log-out" class="h-4 w-4"></i>
+                        Salir
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="text-muted-foreground hover:text-foreground transition-colors">Login</a>
+                    <a href="{{ url_for('auth.register') }}" class="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 transition-colors">
+                        Registro
+                    </a>
+                {% endif %}
+                
+                <button id="theme-toggle" class="inline-flex items-center justify-center rounded-md p-2 hover:bg-muted text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                    <i data-lucide="sun" class="h-5 w-5 block dark:hidden"></i>
+                    <i data-lucide="moon" class="h-5 w-5 hidden dark:block"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1 container mx-auto max-w-screen-xl px-4 md:px-8 py-8">
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flex flex-col gap-3 mb-8">
+                    {% for message in messages %}
+                        <div class="flex items-center gap-3 rounded-md border border-border bg-muted/50 px-4 py-3 text-sm text-foreground shadow-sm">
+                            <i data-lucide="info" class="h-4 w-4 text-muted-foreground"></i>
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        lucide.createIcons();
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>

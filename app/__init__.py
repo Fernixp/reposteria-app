@@ -1,23 +1,28 @@
 import pymysql
 pymysql.install_as_MySQLdb()
 
-from flask import Flask
+from flask import Flask, render_template
 from config import Config
 from app.extensions import db, login_manager, migrate
 
 def create_app():
     app = Flask(__name__)
-    
-    # Cargamos la configuración de MySQL
     app.config.from_object(Config)
 
-    # Inicializamos las extensiones con la app
     db.init_app(app)
     login_manager.init_app(app)
     migrate.init_app(app, db)
 
+    from .auth import auth_bp
+    app.register_blueprint(auth_bp)
+
+    from .models import User
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
     @app.route('/')
     def index():
-        return "¡App de Repostería funcionando!"
+        return render_template('layout.html')
 
     return app

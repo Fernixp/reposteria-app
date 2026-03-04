@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] mt-10">
+    <div class="flex flex-col space-y-2 text-center">
+        <div class="mx-auto bg-muted p-3 rounded-full mb-2">
+            <i data-lucide="log-in" class="h-6 w-6 text-foreground"></i>
+        </div>
+        <h1 class="text-2xl font-semibold tracking-tight">Bienvenido de nuevo</h1>
+        <p class="text-sm text-muted-foreground">Ingresa tus credenciales para continuar</p>
+    </div>
+
+    <div class="rounded-xl border border-border bg-card text-card-foreground shadow-sm p-6">
+        <form method="POST" class="space-y-4">
+            <div class="space-y-2">
+                <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Usuario</label>
+                <input type="text" name="username" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" required placeholder="tu_usuario">
+            </div>
+            <div class="space-y-2">
+                <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Contraseña</label>
+                <input type="password" name="password" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full mt-2">
+                Entrar
+            </button>
+        </form>
+    </div>
+    <p class="px-8 text-center text-sm text-muted-foreground">
+        ¿No tienes cuenta? <a href="{{ url_for('auth.register') }}" class="underline underline-offset-4 hover:text-primary">Regístrate</a>
+    </p>
+</div>
+{% endblock %}
